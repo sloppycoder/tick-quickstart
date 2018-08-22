@@ -1,3 +1,7 @@
+- name: start haproxy
+  service: name=haproxy state=restarted
+  become: yes
+
 - name: start influxdb
   service: name=influxdb state=restarted
   become: yes

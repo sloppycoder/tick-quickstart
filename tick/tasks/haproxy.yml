@@ -1,0 +1,28 @@
+- name: Disable SELinux
+  selinux:
+    state: disabled
+  become: yes
+
+- name: Install HAProxy
+  yum: name={{ item }} state=installed
+  with_items:
+    - haproxy
+  become: yes
+
+- name: Backup haproxy config
+  command: mv haproxy.cfg haproxy.cfg.bk
+  args:
+    chdir: /etc/haproxy
+    creates: /etc/haproxy/haproxy.cfg.bk
+  become: yes
+
+- name: Apply haproxy config for Chronograf
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - start haproxy

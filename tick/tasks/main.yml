@@ -1,3 +1,6 @@
+- include: haproxy.yml
+  when: use_haproxy
+
 - name: Install InfluxDB
   yum:
     name: "{{ file_server }}/influxdb/releases/influxdb-{{ influxdb_version }}.x86_64.rpm"
@@ -36,7 +39,7 @@
     dest: /etc/telegraf/telegraf.conf
     owner: telegraf
     group: telegraf
-    mode: 0755
+    mode: 0644
   become: yes
   notify:
     - start telegraf
