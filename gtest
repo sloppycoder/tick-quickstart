@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+new_vm()
+{
+gcloud compute instances create $1 \
+	--machine-type=n1-standard-1 \
+	--tags=http-server,https-server \
+	--image=centos-7-v20180815 --image-project=centos-cloud \
+	--boot-disk-size=10GB --quiet
+}
+
+get_ip()
+{
+  NEW_VM_IP=`gcloud compute ssh $1 --command 'curl -s -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip'`
+  echo VM $1 external IP is $NEW_VM_IP
+}
+
+gcloud compute instances delete tt --quiet
+
+new_vm tt
+sleep 20
+get_ip tt
+export TEST_SERVER=$NEW_VM_IP
+export ANSIBLE_HOST_KEY_CHECKING=False
+ansible-playbook -i hosts.yml site.yml 

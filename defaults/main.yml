@@ -1,9 +1,0 @@
----
-
-influxdb_version: 1.6.1
-chronograf_version: 1.6.1
-kapacitor_version: 1.5.1
-telegraf_version: 1.7.3
-
-# Publicly reachable URL for chronograf
-# chronograf_public_url: 'https://chronograf.my-domain.com'

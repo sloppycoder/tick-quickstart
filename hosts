@@ -1,7 +1,0 @@
-
-[tick]
-# host to install TICK to
-
-[tick.vars]
-sudoer=guru_lin
-file_server=https://dl.influxdata.com/influxdb/releases

@@ -1,0 +1,51 @@
+- name: Install InfluxDB
+  yum:
+    name: "{{ file_server }}/influxdb/releases/influxdb-{{ influxdb_version }}.x86_64.rpm"
+    state: installed
+    disable_gpg_check: yes
+  become: yes
+  notify:
+    - start influxdb
+
+- name: Install Kapacitor
+  yum:
+    name: "{{ file_server }}/kapacitor/releases/kapacitor-{{ kapacitor_version }}.x86_64.rpm"
+    state: installed
+    disable_gpg_check: yes
+  become: yes
+  notify:
+    - start kapacitor
+
+- name: Install Telegraf
+  yum:
+    name: "{{ file_server }}/telegraf/releases/telegraf-{{ telegraf_version }}.x86_64.rpm"
+    state: installed
+    disable_gpg_check: yes
+  become: yes
+
+- name: Backup original telegraf.conf
+  command: mv telegraf.conf telegraf.conf.orig
+  args:
+    chdir: /etc/telegraf
+    creates: /etc/telegraf/telegraf.conf.orig
+  become: yes
+
+- name: Apply sample telegraf configuration
+  template:
+    src: telegraf.conf.j2
+    dest: /etc/telegraf/telegraf.conf
+    owner: telegraf
+    group: telegraf
+    mode: 0755
+  become: yes
+  notify:
+    - start telegraf
+
+- name: Install Chronograf
+  yum:
+    name: "{{ file_server }}/chronograf/releases/chronograf-{{ chronograf_version }}.x86_64.rpm"
+    state: installed
+    disable_gpg_check: yes
+  become: yes
+  notify:
+    - start chronograf

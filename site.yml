@@ -1,0 +1,4 @@
+- name: Install InfluxData TICK stack
+  hosts: all
+  roles:
+    - tick
